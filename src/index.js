@@ -4,7 +4,10 @@
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 const app = express();
+
+
 
 mongoose.connect('mongodb://localhost:27017/course-rating-api');
 
@@ -17,6 +20,11 @@ db.on('error', console.error.bind(console, 'connection error'));
 db.on('connected', function(){
   console.log('Connection to mongoDB successfully opened.');
 })
+
+// view engine setup
+app.set('view engine', 'pug');
+app.set('views', __dirname + '/views');
+
 
 // set our port
 app.set('port', process.env.PORT || 5000);
@@ -32,6 +40,14 @@ app.get('/', (req, res) => {
     message: 'Welcome to the Course Review API'
   });
 });
+
+// parse incoming requests
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// GET user route
+const usersRoute = require('./routes/usersRoute');
+app.use('/api', usersRoute);
 
 // uncomment this route in order to test the global error handler
 // app.get('/error', function (req, res) {
