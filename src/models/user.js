@@ -1,4 +1,5 @@
 const isEmail = require('validator').isEmail;
+const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const userSchema = new mongoose.Schema({
   fullName: {
@@ -8,7 +9,7 @@ const userSchema = new mongoose.Schema({
   emailAddress: {
     type: String,
     required: true,
-    unique: [true, 'This email address has been used before'],
+    unique: true,
     trim: true,
     validate: [isEmail, 'invalid email']
   },
@@ -16,6 +17,34 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   }
+})
+
+userSchema.statics.authenticate = function(email, password, callback){
+  User.findOne({email: email})
+      .exec(function(err, user){
+        if(err) return err
+        else if(!user){
+          const error = new Error('User not found.');
+          error.status = 401;
+          return callback(error);
+        }
+        bcrypt.compare(password, user.password, function(err, result){
+          if(result === true){
+            return callback(null, user);
+          } else{
+            return callback();
+          }
+        })
+      })
+}
+
+userSchema.pre('save', function(next){
+  const user = this;
+  bcrypt.hash(user.password, 10, function(err, hash){
+    if(err) next(err);
+    user.password = hash;
+    next();
+  })
 })
 
 

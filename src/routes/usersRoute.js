@@ -25,7 +25,9 @@ router.post('/users', function(req, res, next){
          }
          User.create(userData, function(err, user){
            if(err) return next(err);
-           return res.redirect('/');
+           res.location('/');
+           res.status(201);
+           res.end();
          })
        }
      }
