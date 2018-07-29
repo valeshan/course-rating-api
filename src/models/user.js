@@ -20,9 +20,9 @@ const userSchema = new mongoose.Schema({
 })
 
 userSchema.statics.authenticate = function(email, password, callback){
-  User.findOne({email: email})
+  User.findOne({emailAddress : email})
       .exec(function(err, user){
-        if(err) return err
+        if(err) return callback(err)
         else if(!user){
           const error = new Error('User not found.');
           error.status = 401;
