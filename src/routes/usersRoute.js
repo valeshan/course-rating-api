@@ -22,7 +22,7 @@ router.post('/users', function(req, res, next){
     res.location('/');
     res.end();
   })
-})
+});
 
 
 module.exports = router;
