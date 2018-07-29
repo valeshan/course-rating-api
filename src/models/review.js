@@ -1,4 +1,3 @@
-import isInt from 'validator';
 const mongoose = require('mongoose');
 const User = require('./user');
 
@@ -9,7 +8,7 @@ const reviewSchema = new mongoose.Schema({
   },
   postedOn: {
     type: Date,
-    default: Date.now;
+    default: Date.now
   },
   rating:{
     type: Number,

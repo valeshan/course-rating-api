@@ -13,25 +13,15 @@ router.get('/users', mid.authenticateUser, function(req, res, next){
 })
 
 //POST User data
+
 router.post('/users', function(req, res, next){
-  if(req.body.fullName &&
-     req.body.emailAddress &&
-     req.body.password &&
-     req.body.confirmPassword){
-       if(req.body.password === req.body.confirmPassword){
-         const userData = {
-           fullName: req.body.fullName,
-           emailAddress: req.body.emailAddress,
-           password: req.body.password
-         }
-         User.create(userData, function(err, user){
-           if(err) return next(err);
-           res.location('/');
-           res.status(201);
-           res.end();
-         })
-       }
-     }
+  const user = new User(req.body);
+  user.save(function(err, user){
+    if(err) return next(err)
+    res.status(201);
+    res.location('/');
+    res.end();
+  })
 })
 
 

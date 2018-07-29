@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
     trim: true,
-    validate: [isEmail, 'invalid email']
+    validate: [isEmail, 'Please correctly type in your email.']
   },
   password: {
     type: String,
@@ -25,16 +25,17 @@ userSchema.statics.authenticate = function(email, password, callback){
         if(err) return callback(err)
         else if(!user){
           const error = new Error('User not found.');
-          error.status = 401;
+          error.status = 400;
           return callback(error);
         }
-        bcrypt.compare(password, user.password, function(err, result){
+        else{
+          bcrypt.compare(password, user.password, function(err, result){
           if(result === true){
             return callback(null, user);
           } else{
             return callback();
           }
-        })
+        })}
       })
 }
 

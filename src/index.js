@@ -21,11 +21,6 @@ db.on('connected', function(){
   console.log('Connection to mongoDB successfully opened.');
 })
 
-// view engine setup
-app.set('view engine', 'pug');
-app.set('views', __dirname + '/views');
-
-
 // set our port
 app.set('port', process.env.PORT || 5000);
 
@@ -48,6 +43,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // GET user route
 const usersRoute = require('./routes/usersRoute');
 app.use('/api', usersRoute);
+
+//GET course route
+const coursesRoute = require('./routes/coursesRoute');
+app.use('/api', coursesRoute);
 
 // uncomment this route in order to test the global error handler
 // app.get('/error', function (req, res) {
