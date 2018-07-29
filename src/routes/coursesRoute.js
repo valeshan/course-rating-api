@@ -17,7 +17,7 @@ router.param('courseId', function(req, res, next, id){
           }
           req.course = doc;
           return next();
-        }).populate('user reviews')
+        }).populate('user reviews');
 })
 
 //POST create course
@@ -30,15 +30,23 @@ router.post('/courses', mid.authenticateUser, function(req, res, next) {
   });
 });
 
+
 //POST add review into course by courseId
 router.post('/courses/:courseId/reviews', mid.authenticateUser, function(req, res, next){
+  // const review = new Review(req.body);
+  // review.save(function(err, review){
+  //   if(err) return next(err);
+  //   res.status(201);
+  //   res.location('couses/:courseId').json();
+  // })
   req.course.reviews.push(req.body);
-  req.course.save(function(err, course){
-    if(err) return next(err);
+  req.course.save(function(err, course) {
+    if(err) return res.json(err);
     res.status(201);
-    res.location('/courses/:courseId').json();
-  })
+    res.location('courses/:courseId').json();
+  });
 })
+
 
 //GET all courses
 router.get('/courses', function(req, res, next){
