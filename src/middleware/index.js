@@ -7,7 +7,7 @@ function authenticateUser(req, res, next){
     User.authenticate(user.name, user.pass, function(error, user){
       if(!user || error){
         const err = new Error('Wrong email or password');
-        err.status = 401;
+        err.status = 403;
         return next(err);
       } else{
         req.loggedInUser = user;
