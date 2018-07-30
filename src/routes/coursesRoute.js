@@ -33,18 +33,16 @@ router.post('/courses', mid.authenticateUser, function(req, res, next) {
 
 //POST add review into course by courseId
 router.post('/courses/:courseId/reviews', mid.authenticateUser, function(req, res, next){
-  // const review = new Review(req.body);
-  // review.save(function(err, review){
-  //   if(err) return next(err);
-  //   res.status(201);
-  //   res.location('couses/:courseId').json();
-  // })
-  req.course.reviews.push(req.body);
-  req.course.save(function(err, course) {
-    if(err) return res.json(err);
+  const review = new Review(req.body);
+  review.save(function(err, review){
+    if(err) return next(err);
+    req.course.reviews.push(review._id);
+    req.course.save(function(err, course) {
+      if(err) return next(err);
+    })
     res.status(201);
-    res.location('courses/:courseId').json();
-  });
+    res.location('couses/:courseId').json();
+  })
 })
 
 
